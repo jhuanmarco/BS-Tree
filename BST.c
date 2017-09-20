@@ -62,16 +62,36 @@ void searchAddNode(NODE *node, NODE *new, int info){
 
 void addNode(NODE *root){
 	NODE *newNode = createNode();
+	NODE *walk = root;
 	
 	if(!newNode){
 		 printf("Error: No Memory");
 		 return;
+	
 	}
 	
-	newNode->left = NULL;
-	newNode->right = NULL;
-	
-	searchAddNode(root, newNode, newNode->info);
+	while(1) {
+		if(newNode->info < walk->info) {
+			if (walk->left) {
+				walk = walk->left;
+				continue;
+			} 
+
+			walk->left = newNode;
+			break;
+			
+
+		} else { 
+			if (walk->right) {
+				walk = walk->right;
+				continue;
+			}
+
+			walk->right = newNode;
+			break;
+		}	
+
+	}
 
 }
 
