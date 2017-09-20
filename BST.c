@@ -95,21 +95,12 @@ void addNode(NODE *root){
 
 }
 
+void pos(NODE *walk){
+	if(walk->left) pos(walk->left);
+	if(walk->right) pos(walk->right);
+	printf("%d\n", walk->info);
 
-
-
-//PRINT
-
-
-void erd (NODE *r) {
-   if (r != NULL) {
-      erd (r->left);
-      printf ("%d\n", r->info);
-      erd (r->right); 
-   }
 }
-
-
 void main(){
 	char menu;
 	NODE *root = NULL;
@@ -140,7 +131,7 @@ void main(){
 			
 			break;
 			case '4':
-				erd(root);
+				pos(root);	
 			
 			break;
 			default:
