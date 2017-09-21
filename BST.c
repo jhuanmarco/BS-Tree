@@ -105,6 +105,16 @@ void inorder(NODE *walk){
 	return;
 }
 
+void destroyBST(NODE **root){
+	*root = NULL;
+	printf("BST Successful Destroyed\n\n");
+	return;
+}
+
+void searchNode(NODE *root){
+	
+}
+
 void main(){
 	char menu;
 	NODE *root = NULL;	
@@ -121,7 +131,7 @@ void main(){
 				root = createNode();
 				
 			break;
-case '2':
+			case '2':
 				if(!root){
 					printf("BST Not Created, Go to Opt.1\n\n");
 					break;
@@ -132,6 +142,14 @@ case '2':
 			break;
 			case '3':
 			
+			break;
+			case '4':
+				if(!root){
+					printf("BST Not Created, Go to Opt.1\n\n");
+					break;
+				}
+
+				destroyBST(&root);
 			break;
 			case '5':
 				if(root){
