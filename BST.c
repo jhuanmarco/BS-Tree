@@ -10,7 +10,7 @@ typedef struct node {
 
 char mainMenu(){
 	char option;
-	printf("\nBinary Search Tree (BST)\n\nType:\n1 - Create BST\n2 - Add Node\n3 - Del Node\n4 - Destroy BST\n5 - Print BST\n0 - Exit\n");
+	printf("\nBinary Search Tree (BST)\n\nType:\n1 - Create BST\n2 - Add Node\n3 - Search Node\n4 - Del Node\n5 - Destroy BST\n6 - Print BST\n0 - Exit\n");
 	scanf(" %c", &option);
 	printf("\n");
 	
@@ -75,31 +75,31 @@ void addNode(NODE *root){
 
 }
 
-void postorder(NODE *walk){
+void postOrder(NODE *walk){
 	if(walk){
-		postorder(walk->left);
-		postorder(walk->right);
+		postOrder(walk->left);
+		postOrder(walk->right);
 		printf("%d\n", walk->info);
 	}
 
 	return;
 }
 
-void preorder(NODE *walk){
+void preOrder(NODE *walk){
 	if(walk){
 		printf("%d\n", walk->info);
-		preorder(walk->left);
-		preorder(walk->right);
+		preOrder(walk->left);
+		preOrder(walk->right);
 	}
 
 	return;	
 }
 
-void inorder(NODE *walk){
+void inOrder(NODE *walk){
 	if(walk){
-		inorder(walk->left);
+		inOrder(walk->left);
 		printf("%d\n", walk->info);
-		inorder(walk->right);
+		inOrder(walk->right);
 	} 
 
 	return;
@@ -107,12 +107,40 @@ void inorder(NODE *walk){
 
 void destroyBST(NODE **root){
 	*root = NULL;
-	printf("BST Successful Destroyed\n\n");
+	printf("BST Successful Destroyed\n");
 	return;
 }
 
-void searchNode(NODE *root){
+int searchMatchesNode(NODE *root, int i){
+	int matches = 0; 
+
+	if(!root) return 0;
 	
+	if(root->info == i) matches++;
+
+	if(i < root->info){
+		matches += searchMatchesNode(root->left, i);
+	} else {
+		matches += searchMatchesNode(root->right, i);
+	}
+
+	return matches;
+}
+
+void searchNode(NODE* root){
+	int infoSearch, matches;
+	
+	printf("Enter The Info to Search: ");
+	scanf(" %d", &infoSearch);
+
+	matches = searchMatchesNode(root, infoSearch);
+	if(matches == 0) {
+		printf("There's no Match for this Info\n");
+		return;
+	}
+
+	printf("We Found %d Matche's for this Info\n", matches);
+	return;
 }
 
 void main(){
@@ -141,9 +169,17 @@ void main(){
 			
 			break;
 			case '3':
-			
+				if(!root){
+					printf("BST Not Created, Go to Opt.1\n\n");
+					break;
+				}	
+
+				searchNode(root);
 			break;
 			case '4':
+
+			break;
+			case '5':
 				if(!root){
 					printf("BST Not Created, Go to Opt.1\n\n");
 					break;
@@ -151,14 +187,14 @@ void main(){
 
 				destroyBST(&root);
 			break;
-			case '5':
+			case '6':
 				if(root){
 					printf("Tree Traversals:\nPre Order:\n");
-					preorder(root);	
+					preOrder(root);	
 					printf("\nIn Order:\n");
-					inorder(root);
+					inOrder(root);
 					printf("\nPost Order:\n");
-					postorder(root);
+					postOrder(root);
 				} else {
 					printf("BST Not Created, Go to Opt.1\n\n");
 				}
