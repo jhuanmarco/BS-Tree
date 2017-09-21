@@ -40,26 +40,6 @@ NODE *createNode(){
 	return newNode;
 }
 
-void searchAddNode(NODE *node, NODE *new, int info){
-	
-	if(node->info < info){
-		if(node->left){
-			node = node->left;
-			searchAddNode(node, new, info);
-		}
-			node->left = new;
-	} else {
-		if(node->right){
-			node = node->right;
-			searchAddNode(node, new, info);
-		}
-			node->right = new;
-	}
-	
-	
-	return;
-}
-
 void addNode(NODE *root){
 	NODE *newNode = createNode();
 	NODE *walk = root;
@@ -95,12 +75,36 @@ void addNode(NODE *root){
 
 }
 
-void pos(NODE *walk){
-	if(walk->left) pos(walk->left);
-	if(walk->right) pos(walk->right);
-	printf("%d\n", walk->info);
+void postorder(NODE *walk){
+	if(walk){
+		postorder(walk->left);
+		postorder(walk->right);
+		printf("%d\n", walk->info);
+	}
 
+	return;
 }
+
+void preorder(NODE *walk){
+	if(walk){
+		printf("%d\n", walk->info);
+		preorder(walk->left);
+		preorder(walk->right);
+	}
+
+	return;	
+}
+
+void inorder(NODE *walk){
+	if(walk){
+		inorder(walk->left);
+		printf("%d\n", walk->info);
+		inorder(walk->right);
+	} 
+
+	return;
+}
+
 void main(){
 	char menu;
 	NODE *root = NULL;
@@ -131,8 +135,17 @@ void main(){
 			
 			break;
 			case '4':
-				pos(root);	
-			
+				if(root){
+					printf("Tree Traversals:\nPre Order:\n");
+					preorder(root);	
+					printf("\nIn Order:\n");
+					inorder(root);
+					printf("\nPost Order:\n");
+					postorder(root);
+				} else {
+					printf("BST Not Created, Go to Opt.1\n\n");
+				}
+
 			break;
 			default:
 			
