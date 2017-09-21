@@ -10,7 +10,7 @@ typedef struct node {
 
 char mainMenu(){
 	char option;
-	printf("\nBinary Search Tree (BST)\n\nType:\n1 - Create BST\n2 - Add Node\n3 - Del Node\n4 - Print BST\n0 - Exit\n");
+	printf("\nBinary Search Tree (BST)\n\nType:\n1 - Create BST\n2 - Add Node\n3 - Del Node\n4 - Destroy BST\n5 - Print BST\n0 - Exit\n");
 	scanf(" %c", &option);
 	printf("\n");
 	
@@ -107,8 +107,7 @@ void inorder(NODE *walk){
 
 void main(){
 	char menu;
-	NODE *root = NULL;
-		
+	NODE *root = NULL;	
 	
 	do {
 		menu = mainMenu();
@@ -122,7 +121,7 @@ void main(){
 				root = createNode();
 				
 			break;
-			case '2':
+case '2':
 				if(!root){
 					printf("BST Not Created, Go to Opt.1\n\n");
 					break;
@@ -134,7 +133,7 @@ void main(){
 			case '3':
 			
 			break;
-			case '4':
+			case '5':
 				if(root){
 					printf("Tree Traversals:\nPre Order:\n");
 					preorder(root);	
