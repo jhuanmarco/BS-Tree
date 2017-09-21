@@ -127,7 +127,7 @@ int searchMatchesNode(NODE *root, int i){
 	return matches;
 }
 
-void searchNode(NODE* root){
+void searchNode(NODE *root){
 	int infoSearch, matches;
 	
 	printf("Enter The Info to Search: ");
@@ -141,6 +141,11 @@ void searchNode(NODE* root){
 
 	printf("We Found %d Matche's for this Info\n", matches);
 	return;
+}
+
+void deleteNode(NODE *root){
+
+
 }
 
 void main(){
