@@ -148,8 +148,7 @@ void searchNode(NODE *root){
 	return;
 }
 
-NODE *searchedNode(NODE *node, int info){
-	
+NODE *searchedNode(NODE *node, int info){	
 	if(info > node->info) {
 		node = searchedNode(node->right, info);
 	} else if(info < node->info) {
@@ -159,12 +158,12 @@ NODE *searchedNode(NODE *node, int info){
 	return node;
 }
 
-NODE *searchFather(NODE *node, int info){	
+NODE *searchFather(NODE *node, int info){
 	while(1){
 		if((node->left->info == info) || (node->right->info == info)){
 			return node;		
 		} else {
-			if(info > node->info){
+			if(info >= node->info){
 				node = node->right;
 			}else if (info < node->info){
 				node = node->left;		
@@ -187,16 +186,13 @@ NODE *minNode(NODE *node){
 NODE *deleteNode(NODE *root){
 	int nodeInfo, matches, leftRight = 0, leftRightF; //if leftRight == 0 double children's, if -3 only left children, if +1 only right children, if -2 dont have children 
 	NODE *node, *father;
-	
 	printf("Enter The Node Info to Delete: ");
 	scanf(" %d", &nodeInfo);
-	
 	matches = searchMatchesNode(root, nodeInfo);
 	if(matches == 0) { //if node dont exist
 		printf("There's no match for this info\n");
 		return root;
 	}
-	
 	node = searchedNode(root, nodeInfo); //node pointer in selected node to delete
 	
 	if(node != root) father = searchFather(root, nodeInfo);
@@ -217,11 +213,12 @@ NODE *deleteNode(NODE *root){
 			free(root);
 			return NULL;
 		} else if(leftRight == RICHIL){
-			root = root->right;		
+			root = root->right;	
+			return root;	
 		} else if (leftRight == LECHIL){
-			root = root->left;		
+			root = root->left;
+			return root;		
 		} else {
-			
 			aux = minNode(node->right);
 			auxP = searchFather(root, aux->info);
 		
@@ -260,48 +257,48 @@ NODE *deleteNode(NODE *root){
 			NODE *aux;
 			
 			if(leftRight == LECHIL){
-				aux = node->left;	
-				printf("\n\n possui filho a esquerda\n\n");	
+				aux = node->left;		
 			} else {
-				aux = node->right;	
-				
-				printf("\n\npossui filho a direita\n\n");		
+				aux = node->right;			
 			}
 			
 			if(leftRightF == -1) {
-				father->left = aux;
-				printf("\n\né o filho a esquerda\n\n");		
+				father->left = aux;	
 			} else {
-				father->right = aux;
-				printf("\n\né o filho a direita\n\n");			
+				father->right = aux;		
 			}
 						
 			free(node);
 		}
 	
 	} else { //aqui remove caso houver 2 filhos
-		printf("\n\nVEIO\n\n");
+	
 		NODE *aux = minNode(node->right);
-		printf("\n\nVEIO\n\n");
-		NODE *auxP = searchFather(root, aux->info);
-		printf("\n\nVEIO\n\n");
+		NODE *auxP;
 		
-		if(auxP->left == aux){
+	
+		if(aux->info != node->info){ 
+			auxP = searchFather(root, aux->info);
+		} else {
+			auxP = searchFather(node, aux->info);		
+		}
+		
+		if(auxP->left == aux){ //se o auxiliar for filho a esquerda
 			auxP->left = aux->right;
-		}else{
+			
+		}else if (auxP->right == aux){ 	
 			auxP->right = aux->left;		
 		}
 		
 		if(father->left == node){
-			father->left = aux;
-					
-		} else {
+			father->left = aux;	
+		} else if (father->right == node){
 			father->right = aux;
-	
 		}
 		
-		if(aux->left != aux OU NODE TEM Q VER ISO AQUI) aux->left = node->left;
-		if(aux->right != node) aux->right = node->right;
+		if(aux->left != aux ) aux->left = node->left; 
+		
+		if(aux->right != aux) aux->right = node->right;
 		
 		free(node);
 		
