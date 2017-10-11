@@ -1,6 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define NOCHIL -2
+#define LECHIL -3
+#define RICHIL 1
+#define DOCHIL 0
+
 typedef struct node {
 	int info;
 	struct node *left;
@@ -143,9 +148,167 @@ void searchNode(NODE *root){
 	return;
 }
 
-void deleteNode(NODE *root){
+NODE *searchedNode(NODE *node, int info){
+	
+	if(info > node->info) {
+		node = searchedNode(node->right, info);
+	} else if(info < node->info) {
+		node = searchedNode(node->left, info);
+	}
+		
+	return node;
+}
+
+NODE *searchFather(NODE *node, int info){	
+	while(1){
+		if((node->left->info == info) || (node->right->info == info)){
+			return node;		
+		} else {
+			if(info > node->info){
+				node = node->right;
+			}else if (info < node->info){
+				node = node->left;		
+			}
+		}
+	}
+
+}
+
+NODE *minNode(NODE *node){
+	while(node->left){
+		node = node->left;		
+	}
+	
+	return node;
+}
 
 
+
+NODE *deleteNode(NODE *root){
+	int nodeInfo, matches, leftRight = 0, leftRightF; //if leftRight == 0 double children's, if -3 only left children, if +1 only right children, if -2 dont have children 
+	NODE *node, *father;
+	
+	printf("Enter The Node Info to Delete: ");
+	scanf(" %d", &nodeInfo);
+	
+	matches = searchMatchesNode(root, nodeInfo);
+	if(matches == 0) { //if node dont exist
+		printf("There's no match for this info\n");
+		return root;
+	}
+	
+	node = searchedNode(root, nodeInfo); //node pointer in selected node to delete
+	
+	if(node != root) father = searchFather(root, nodeInfo);
+	
+	if(node->left == NULL){
+		leftRight += 1; //single children in right
+	} // -2 no children, -3 children left, 0 double childreens, 1 children right
+	if(node->right == NULL){
+		leftRight += -3; //single chindren in left
+	}
+	
+	if(root == node){
+	
+		NODE *aux;
+		NODE *auxP;
+		
+		if(leftRight == NOCHIL){
+			free(root);
+			return NULL;
+		} else if(leftRight == RICHIL){
+			root = root->right;		
+		} else if (leftRight == LECHIL){
+			root = root->left;		
+		} else {
+			
+			aux = minNode(node->right);
+			auxP = searchFather(root, aux->info);
+		
+			if(auxP->left == aux){
+				auxP->left = aux->right;
+			}else{
+				auxP->right = aux->left;		
+			}
+				
+			aux->left = root->left;
+			aux->right = root->right;
+			free(root);
+					
+		}
+		
+		printf("Successfull Deleted\n");
+		return aux;
+	}
+		
+	if(leftRight != DOCHIL){ //se nao houver filhos duplos
+		if(father->left == node){
+			leftRightF = -1; //caso o filho a ser removido esteja na esquerda
+		} else {
+			leftRightF = 1; //caso o filho a ser removido esteja na direita
+		}
+		if(leftRight == NOCHIL){
+		
+			if(leftRightF == -1){
+				father->left = NULL;		
+			} else {
+				father->right = NULL;			
+			}
+			free(node);
+
+		} else if(leftRight == LECHIL || leftRight == RICHIL){
+			NODE *aux;
+			
+			if(leftRight == LECHIL){
+				aux = node->left;	
+				printf("\n\n possui filho a esquerda\n\n");	
+			} else {
+				aux = node->right;	
+				
+				printf("\n\npossui filho a direita\n\n");		
+			}
+			
+			if(leftRightF == -1) {
+				father->left = aux;
+				printf("\n\né o filho a esquerda\n\n");		
+			} else {
+				father->right = aux;
+				printf("\n\né o filho a direita\n\n");			
+			}
+						
+			free(node);
+		}
+	
+	} else { //aqui remove caso houver 2 filhos
+		printf("\n\nVEIO\n\n");
+		NODE *aux = minNode(node->right);
+		printf("\n\nVEIO\n\n");
+		NODE *auxP = searchFather(root, aux->info);
+		printf("\n\nVEIO\n\n");
+		
+		if(auxP->left == aux){
+			auxP->left = aux->right;
+		}else{
+			auxP->right = aux->left;		
+		}
+		
+		if(father->left == node){
+			father->left = aux;
+					
+		} else {
+			father->right = aux;
+	
+		}
+		
+		if(aux->left != aux OU NODE TEM Q VER ISO AQUI) aux->left = node->left;
+		if(aux->right != node) aux->right = node->right;
+		
+		free(node);
+		
+	}
+	
+	printf("Successfull Deleted\n");
+	return root;
 }
 
 void main(){
@@ -182,7 +345,12 @@ void main(){
 				searchNode(root);
 			break;
 			case '4':
+				if(!root){
+					printf("BST Not Created, Go to Opt.1\n\n");
+					break;
+				}	
 
+				root = deleteNode(root);
 			break;
 			case '5':
 				if(!root){
