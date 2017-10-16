@@ -110,11 +110,20 @@ void inOrder(NODE *walk){
 	return;
 }
 
+void destroy(NODE *root){
+	if(!root) return;
+	destroy(root->left);
+	destroy(root->right);
+	free(root);
+}
+
 void destroyBST(NODE **root){
-	*root = NULL;
+	destroy(*root);
 	printf("BST Successful Destroyed\n");
+	*root = NULL;
 	return;
 }
+
 
 int searchMatchesNode(NODE *root, int i){
 	int matches = 0; 
